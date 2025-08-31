@@ -218,6 +218,11 @@ def file_load(path, docs_all):
         # ファイルの拡張子に合ったdata loaderを使ってデータ読み込み
         loader = ct.SUPPORTED_EXTENSIONS[file_extension](path)
         docs = loader.load()
+        # PDFの場合、各チャンクにページ番号がなければ1ページ目として付与
+        if file_extension == ".pdf":
+            for doc in docs:
+                if "page" not in doc.metadata:
+                    doc.metadata["page"] = 1
         docs_all.extend(docs)
 
 
